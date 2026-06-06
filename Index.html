@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghost Track Marketplace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-950 text-gray-100 font-sans antialiased">
+
+    <header class="border-b border-gray-900 bg-gray-950/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <div class="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center shadow-lg shadow-purple-500/30">
+                    <i class="fas fa-ghost text-xl text-white"></i>
+                </div>
+                <span class="text-xl font-bold tracking-wider uppercase bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">GhostAudio</span>
+            </div>
+            <nav class="hidden md:flex space-x-8 text-sm font-medium text-gray-400">
+                <a href="#" class="text-purple-400 transition">Tracks</a>
+                <a href="#" class="hover:text-white transition">How it Works</a>
+                <a href="#" class="hover:text-white transition">Services</a>
+            </nav>
+            <button class="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition shadow-md shadow-purple-600/20">
+                Start Selling
+            </button>
+        </div>
+    </header>
+
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-6 text-center">
+        <h1 class="text-4xl sm:text-5xl font-black tracking-tight mb-4">
+            Buy Exclusive <span class="text-purple-500">Ghost Tracks</span>
+        </h1>
+        <p class="text-gray-400 max-w-2xl mx-auto text-base sm:text-lg">
+            100% anonymous, fully arranged, and ready-to-release premium tracks with full ownership rights.
+        </p>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="flex items-center justify-between border-b border-gray-900 pb-4 mb-8 overflow-x-auto">
+            <div class="flex space-x-2 sm:space-x-4 whitespace-nowrap pr-4" id="genreContainer">
+                <button onclick="filterGenre('all')" class="genre-btn active px-4 py-2 rounded-full text-sm font-medium border border-purple-500 bg-purple-600 text-white transition">
+                    All Tracks
+                </button>
+                <button onclick="filterGenre('bigroom')" class="genre-btn px-4 py-2 rounded-full text-sm font-medium border border-gray-800 bg-gray-900 text-gray-400 hover:text-white hover:border-gray-700 transition">
+                    Big Room House
+                </button>
+                <button onclick="filterGenre('techhouse')" class="genre-btn px-4 py-2 rounded-full text-sm font-medium border border-gray-800 bg-gray-900 text-gray-400 hover:text-white hover:border-gray-700 transition">
+                    Tech House
+                </button>
+                <button onclick="filterGenre('slaphouse')" class="genre-btn px-4 py-2 rounded-full text-sm font-medium border border-gray-800 bg-gray-900 text-gray-400 hover:text-white hover:border-gray-700 transition">
+                    Slap House
+                </button>
+                <button onclick="filterGenre('techno')" class="genre-btn px-4 py-2 rounded-full text-sm font-medium border border-gray-800 bg-gray-900 text-gray-400 hover:text-white hover:border-gray-700 transition">
+                    Techno
+                </button>
+            </div>
+            <div class="text-xs text-gray-500 font-medium whitespace-nowrap hidden sm:block">
+                Showing <span id="trackCount" class="text-purple-400 font-bold">9</span> Tracks
+            </div>
+        </div>
+    </section>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" id="tracksGrid">
+            </div>
+    </main>
+
+    <script>
+        // 9 Tracks Data Array
+        const tracksData = [
+            { id: 1, title: "Supernova", genre: "bigroom", genreLabel: "Big Room House", bpm: "128", key: "G# Min", price: "$299", img: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=500&auto=format&fit=crop&q=60" },
+            { id: 2, title: "Deep Underground", genre: "techhouse", genreLabel: "Tech House", bpm: "126", key: "A Min", price: "$249", img: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&auto=format&fit=crop&q=60" },
+            { id: 3, title: "Eclipse Vibes", genre: "slaphouse", genreLabel: "Slap House", bpm: "124", key: "D Min", price: "$199", img: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500&auto=format&fit=crop&q=60" },
+            { id: 4, title: "Mainstage Madness", genre: "bigroom", genreLabel: "Big Room House", bpm: "130", key: "F Min", price: "$349", img: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&auto=format&fit=crop&q=60" },
+            { id: 5, title: "Cyberpunk Acid", genre: "techno", genreLabel: "Techno", bpm: "132", key: "C Min", price: "$279", img: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=500&auto=format&fit=crop&q=60" },
+            { id: 6, title: "Late Night Groove", genre: "techhouse", genreLabel: "Tech House", bpm: "127", key: "B Maj", price: "$259", img: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=500&auto=format&fit=crop&q=60" },
+            { id: 7, title: "Neon Horizon", genre: "slaphouse", genreLabel: "Slap House", bpm: "122", key: "E Min", price: "$229", img: "https://images.unsplash.com/photo-1571330735066-03add575249c?w=500&auto=format&fit=crop&q=60" },
+            { id: 8, title: "Dark Matter Rave", genre: "techno", genreLabel: "Techno", bpm: "135", key: "F# Min", price: "$319", img: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=500&auto=format&fit=crop&q=60" },
+            { id: 9, title: "Titanium Drop", genre: "bigroom", genreLabel: "Big Room House", bpm: "128", key: "A# Min", price: "$399", img: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=500&auto=format&fit=crop&q=60" }
+        ];
+
+        // Function to render tracks dynamically
+        function renderTracks(tracks) {
+            const grid = document.getElementById('tracksGrid');
+            const countSpan = document.getElementById('trackCount');
+            grid.innerHTML = '';
+            countSpan.innerText = tracks.length;
+
+            tracks.forEach(track => {
+                const card = `
+                    <div class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden group hover:border-purple-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-purple-950/20">
+                        <div class="relative aspect-square overflow-hidden bg-gray-800">
+                            <img src="${track.img}" alt="${track.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+                                <button class="w-14 h-14 bg-purple-600 text-white rounded-full flex items-center justify-center pl-1 shadow-lg hover:bg-purple-500 transform hover:scale-110 transition">
+                                    <i class="fas fa-play text-xl"></i>
+                                </button>
+                            </div>
+                            <span class="absolute top-4 left-4 bg-black/70 backdrop-blur text-xs font-semibold px-2.5 py-1 rounded-md tracking-wide text-purple-400 border border-gray-800">
+                                ${track.genreLabel}
+                            </span>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="text-lg font-bold text-white tracking-tight truncate">${track.title}</h3>
+                            <div class="flex items-center space-x-4 text-xs text-gray-400 mt-2">
+                                <div class="flex items-center space-x-1">
+                                    <i class="fas fa-heartbeat text-gray-600"></i>
+                                    <span>${track.bpm} BPM</span>
+                                </div>
+                                <div class="flex items-center space-x-1">
+                                    <i class="fas fa-music text-gray-600"></i>
+                                    <span>${track.key}</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between mt-5 pt-4 border-t border-gray-800/60">
+                                <div class="flex flex-col">
+                                    <span class="text-xs text-gray-500 font-medium">Exclusive Price</span>
+                                    <span class="text-xl font-black text-white">${track.price}</span>
+                                </div>
+                                <button class="bg-gray-800 hover:bg-purple-600 text-gray-200 hover:text-white px-4 py-2 rounded-lg text-sm font-semibold transition flex items-center space-x-2">
+                                    <i class="fas fa-shopping-cart text-xs"></i>
+                                    <span>Instant Buy</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += card;
+            });
+        }
+
+        // Filter Logic
+        function filterGenre(genre) {
+            // Update active state of buttons
+            const buttons = document.querySelectorAll('.genre-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-purple-600', 'text-white', 'border-purple-500');
+                btn.classList.add('bg-gray-900', 'text-gray-400', 'border-gray-800');
+            });
+
+            // Target the clicked button
+            const clickedBtn = event.currentTarget;
+            clickedBtn.classList.add('bg-purple-600', 'text-white', 'border-purple-500');
+            clickedBtn.classList.remove('bg-gray-900', 'text-gray-400', 'border-gray-800');
+
+            if(genre === 'all') {
+                renderTracks(tracksData);
+            } else {
+                const filtered = tracksData.filter(t => t.genre === genre);
+                renderTracks(filtered);
+            }
+        }
+
+        // Initial Load (Show all 9 tracks on startup)
+        window.onload = () => {
+            renderTracks(tracksData);
+        };
+    </script>
+</body>
+</html>
